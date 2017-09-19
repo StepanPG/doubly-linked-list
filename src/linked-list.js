@@ -39,7 +39,20 @@ class LinkedList {
       return currentNode.data;
     }
 
-    insertAt(index, data) {}
+    insertAt(index, data) {
+      var nodeToInsert = new Node(data),
+          currentNode = this._head,
+          beforeNodeToInsert;
+
+      for (let i = 0; i < index; i++) {
+          currentNode = currentNode.next;
+      }
+          beforeNodeToInsert = currentNode.prev;
+          beforeNodeToInsert.next = nodeToInsert;
+          currentNode.prev = nodeToInsert;
+          nodeToInsert.next = currentNode;
+          nodeToInsert.prev = beforeNodeToInsert;
+    }
 
     isEmpty() {
       if(this.length){
@@ -47,9 +60,35 @@ class LinkedList {
       } else return true;
     }
 
-    clear() {}
+    clear() {
+      var currentNode = this._tail,
+          length = this.length,
+          beforeNodeToClear = null;
 
-    deleteAt(index) {}
+      for (let i = length; i > 0; i--) {
+          beforeNodeToClear = currentNode.prev;
+          currentNode.prev = null;
+          currentNode.next = null;
+          currentNode = beforeNodeToClear;
+      }
+      this._tail.data = null;
+      this._head.data = null;
+      this.length = 0;
+    }
+
+    deleteAt(index) {
+      var nodeToDelete = this._head,
+          beforeNodeToDelete;
+
+      for(let i = 0; i < index; i++){
+        beforeNodeToDelete = nodeToDelete;
+        nodeToDelete = nodeToDelete.next;
+      }
+
+      beforeNodeToDelete.next = nodeToDelete.next;
+      nodeToDelete.next.prev = beforeNodeToDelete;
+      nodeToDelete.data = null;
+    }
 
     reverse() {
       var currentNode = this._head,
